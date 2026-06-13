@@ -179,6 +179,17 @@ class SequentialMatrix extends Matrix {
 // ============================================================================
 public class Main {
 
+    // Dimensiones del experimento — idénticas en ambas versiones (secuencial y paralela).
+    // Progresión mixta: pasos finos al inicio (donde O(n³) despega) y pasos más
+    // amplios al final (donde la curva cúbica ya domina claramente).
+    // Total: 33 puntos de medición, rango 10–1000.
+    private static final int[] DIMENSIONES = {
+        10,  20,  30,  40,  50,  60,  70,  80,  90, 100,
+        125, 150, 175, 200, 225, 250, 275, 300, 325, 350,
+        375, 400, 450, 500, 550, 600, 650, 700, 750, 800,
+        850, 900, 1000
+    };
+
     public static void main(String[] args) {
         System.out.println("==================================================");
         System.out.println("DEMO: MATRICES DE PRUEBA Y RESULTADOS");
@@ -192,7 +203,7 @@ public class Main {
     }
 
     // Muestra matrices de prueba con valores conocidos y sus resultados
-    private static void mostrarDemoMatrices() {     
+    private static void mostrarDemoMatrices() {
 
         // --- DEMO MULTIPLICACIÓN ---
         System.out.println("\n>>> MULTIPLICACIÓN DE MATRICES (2x2)");
@@ -233,16 +244,12 @@ public class Main {
         Matrix.printDoubleMatrix(redondear(verificacion));
     }
 
-    // Mide tiempos de multiplicación e inversión para matrices de tamaño 40 a 400
+    // Mide tiempos de multiplicación e inversión para cada dimensión del experimento
     private static void generarDatasetCSV() {
-        int inicio = 40;
-        int fin    = 400;
-        int salto  = 40;
-
         System.out.println("Dimension | Tiempo_Multiplicacion_ms | Tiempo_Inversion_ms");
         Random rand = new Random();
 
-        for (int dim = inicio; dim <= fin; dim += salto) {
+        for (int dim : DIMENSIONES) {
             // Matrices aleatorias para multiplicación
             Matrix m1 = new SequentialMatrix(dim, dim);
             Matrix m2 = new SequentialMatrix(dim, dim);
